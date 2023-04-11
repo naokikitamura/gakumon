@@ -1,0 +1,203 @@
+= 学問への扉：計算機プログラミング入門
+
+
+
+== 課題
+
+自分のゲームをつくっていこう．
+
+基本的には，既存のプログラムを変更すればよい．
+絵をつける，音をつける，とかでもOK．
+
+pyxelオフィシャルのサンプルプログラムも是非参考に．
+
+作りたいゲームがあるが，取っ掛かりがつかめない場合は，要相談．
+
+CLEに１，２行でよいので，今日までにできたこと，と，残り時間で行うことを記入．
+←*できるだけ授業時間中に!*
+
+== 今後の予定
+
+7/5(火),7/12(火) ゲーム作り
+
+7/19(火) 資料作り
+
+7/26(火) 発表会
+
+
+== 発表会について
+
+=== 7/26は発表会
+
+- 作成した発表用の資料（パワーポイントなどのファイル）は，7/25正午までにCLEにアップロードすること．
+- 7/26は，パワーポイントをつかってプレゼンする．
+
+当日アップロードしたファイルをダウンロードして，PCにいれておきますので，
+それを使ってプレゼンしてください．
+
+- 時間は，1人3分程度（質問があれば1分程度）．
+
+=== スライド
+
+* プレゼン資料（スライド）のサンプル
+https://github.com/tatsuhirotsuchiya/gakumon/raw/master/meteo.pptx
+
+
+== 前回の質問があった点
+
+GAMEOVERの表示方法
+
+.state.py
+[source,python]
+----
+import pyxel
+pyxel.init(256, 256)
+
+state = "GAMESTART"
+count = 0
+def initialize():
+    #初期化用の処理
+    global count
+    count=0
+
+def updateplay():
+    #ゲームのプレイ中の処理
+    global state,count
+    count+=1
+    if count>=30:
+        state="GAMEOVER"
+
+def update():
+    global state
+    if state == "GAMEOVER" or state=="GAMESTART":
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            state = "PLAYING"
+            initialize()
+    else:
+        updateplay()
+
+
+def draw():
+    global state
+    pyxel.cls(0)
+    if state=="GAMEOVER":
+        #ゲームオーバー画面の描画
+        pyxel.text(104, 124, "GAMEOVER", 7)
+    elif state=="GAMESTART":
+        #ゲームのスタート画面の描画
+        pyxel.text(104, 124, "GAMESTART", 7)
+    else:
+        #ゲームプレイ中の描画
+        pyxel.text(104, 124, "PLAYING", 7)
+pyxel.run(update, draw)
+----
+
+ランダムに飛び跳ねる敵の作成方法．ジャンプして缶をよけるゲームのCanのクラスに主人公と同じようなジャンプの処理を加える．
+.jumpenemy.py
+[source,python]
+----
+import pyxel
+pyxel.init(256, 256)
+#ランダムの使用
+import random
+
+class Player:
+    def __init__(self):
+        self.y = 150
+        self.vy = 0
+        #プレイヤーのx座標を追加
+        self.x = 200
+
+    def update(self):
+        self.y = min(150, self.y + self.vy)
+        self.vy = self.vy + 1
+        if self.y == 150 and pyxel.btnp(pyxel.KEY_SPACE):
+            self.vy = -10
+
+    def draw(self):
+        pyxel.rectb(self.x, self.y, 16, 16, 15)
+
+
+class JumpEnemy:
+    def __init__(self, x, vx):
+        self.x = x
+        self.vx = vx
+        self.y = 150
+        self.vy = 0
+        #飛ぶ高さをセット
+        self.rnd = random.randint(6,20)
+
+    def update(self):
+        self.x = self.x + self.vx
+        if self.x > 256:
+            self.x = -20
+            #ジャンプの高さのリセット
+            self.rnd = random.randint(10,20)
+        #Jumpの処理
+        self.y = min(150, self.y + self.vy)
+        self.vy = self.vy + 2
+        #地面についていたらランダムな高さで飛ぶ
+        if self.y == 150:
+            self.vy = -self.rnd
+
+    def draw(self):
+        pyxel.rectb(self.x, self.y, 16, 16, 12)
+
+
+class Block:
+    def __init__(self, x, col):
+        self.x = x
+        self.col = col
+
+    def update(self):
+        self.x = self.x + 4
+        if self.x >= 256:
+            self.x = -64
+
+    def draw(self):
+        pyxel.rectb(self.x, 166, 64, 16, self.col)
+
+
+player = Player()
+#ジャンプエネミーを追加
+jumpenemys = [JumpEnemy(-100, 5), JumpEnemy(-250, 8)]
+state = "GAMEOVER"
+life = 20
+blocks = [Block(0, 1), Block(64, 2), Block(128, 1),
+          Block(192, 2), Block(-64, 1)]
+
+
+def update():
+    global player, jumpenemys, state, life
+    if state == "GAMEOVER":
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            state = "PLAYING"
+            life = 20
+    else:
+        player.update()
+        #ジャンプエネミーの当たり判定
+        for j in jumpenemys:
+            j.update()
+            if j.x - 10 < player.x < j.x + 10 and \
+                    j.y-10 <= player.y <= j.y + 10:
+                life = life - 1
+                break
+        if life == 0:
+            state = "GAMEOVER"
+        for block in blocks:
+            block.update()
+
+
+def draw():
+    global player, jumpenemys, state, life
+    pyxel.cls(0)
+    player.draw()
+    #ジャンプエネミーの描画処理
+    for j in jumpenemys:
+        j.draw()
+    pyxel.text(0, 0, str(life), 10)
+    for block in blocks:
+        block.draw()
+
+pyxel.run(update, draw)
+----
