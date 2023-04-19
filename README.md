@@ -5,6 +5,8 @@
 
 ### [1回: 4/14](c01.asciidoc)
 
+### [2回: 4/19](c02.asciidoc)
+
 <!--
 ### [1回: 4/12](c01.asciidoc)
 
@@ -39,6 +41,8 @@
 ## 参考資料など
 
 - [京大のPythonのテキスト](http://hdl.handle.net/2433/245698)
+
+- [MacPCでのPythonとpyxelのインストール](for_macPC_install.md)
 
 ## ブラウザだけでプログラミング
 
