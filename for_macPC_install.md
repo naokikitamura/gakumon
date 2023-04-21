@@ -24,6 +24,6 @@ python3 -m pip install -U pyxel
 
 例：Documentファイルにpyxel.pyというファイルを置いた場合.
 1. finderでDocumentフォルダを開く->pyxel.pyをoptionボタンを押しながら右クリックをして"pyxel.py"のパスのコピーを選択．
-- この時/Users/kitamura/Documents/pyxel.pyがコピーされる．
+- この時/Users/kitamura/Documents/pyxel.pyがコピーされる(kitamuraはユーザ名)．
 2. ターミナルでcd /Users/kitamura/Documentsと入力する．
 3. ターミナルでpyxel run pyxel.pyと入力する．
