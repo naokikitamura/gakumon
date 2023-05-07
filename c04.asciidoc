@@ -247,7 +247,7 @@ print(PICS[1])
 ==== Pyxel
 
 次回以降，
-https://github.com/kitao/pyxel/blob/master/README.ja.md[pyxel] をつかって，
+https://github.com/kitao/pyxel/blob/main/docs/README.ja.md[pyxel] をつかって，
 プログラムを作っていく予定．
 インストールしてみること．
 
