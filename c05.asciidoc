@@ -2,7 +2,7 @@
 
 == Pyxelをつかったプログラミング
 
-https://github.com/kitao/pyxel/blob/master/README.ja.md[pyxel] をつかって，
+https://github.com/kitao/pyxel/blob/main/docs/README.ja.md[pyxel] をつかって，
 プログラムを作っていく．
 インストールがまだの人はインストールを完了させよう．
 
