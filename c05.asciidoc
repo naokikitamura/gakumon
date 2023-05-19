@@ -6,22 +6,22 @@ https://github.com/kitao/pyxel/blob/main/docs/README.ja.md[pyxel] をつかっ�
 プログラムを作っていく．
 インストールがまだの人はインストールを完了させよう．
 
-パッケージ版でも良いが，スタンドアロン版でもよいはず．
+// パッケージ版でも良いが，スタンドアロン版でもよいはず．
 
-IDELからPyxelを使ったアルゴリズムを実行すると，
-`ESC` を押しても画面が消えないなどの問題があることがある．
+// IDELからPyxelを使ったアルゴリズムを実行すると，
+// `ESC` を押しても画面が消えないなどの問題があることがある．
 
-その場合，Windowsならコマンドプロンプトから，
-Macならターミナルから，
-"pyxel run ファイル名"を実行することを推奨．
+// その場合，Windowsならコマンドプロンプトから，
+// Macならターミナルから，
+// "pyxel run ファイル名"を実行することを推奨．
 
-パッケージ版のpyxelをインストールしたなら，通常のpythonプログラムのように，
-Windowsならコマンドプロンプトから "python ファイル名"，
-Macならターミナルから"python3 ファイル名"として実行可能．
+// パッケージ版のpyxelをインストールしたなら，通常のpythonプログラムのように，
+// Windowsならコマンドプロンプトから "python ファイル名"，
+// Macならターミナルから"python3 ファイル名"として実行可能．
 
 // プログラムのファイルをクリックして直接実行してもよい．
 
-実行は，`ESC` キーで終了できる．
+// 実行は，`ESC` キーで終了できる．
 
 === 座標を理解する
 
@@ -61,7 +61,7 @@ pyxel.show()
 ==== 練習
 信号機を完成させよう．
 色は0～15で指定．
-https://github.com/kitao/pyxel/blob/main/doc/images/05_color_palette.png[カラーパレット]
+https://github.com/kitao/pyxel/blob/main/docs/images/05_color_palette.png[カラーパレット]
 
 == 乱数と繰り返し
 
