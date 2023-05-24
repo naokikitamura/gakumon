@@ -2,7 +2,7 @@
 
 == Pyxelをつかったプログラミング
 
-https://github.com/kitao/pyxel/blob/master/README.ja.md[pyxel] をつかって，
+https://github.com/kitao/pyxel/blob/main/docs/README.ja.md[pyxel] をつかって，
 プログラムを作っていく．
 
 ここでは，飛び交うボールに当たらないようにキャラを動かすゲームを考えよう．
