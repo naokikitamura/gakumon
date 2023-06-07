@@ -17,6 +17,8 @@
 
 ### [7回: 6/2](c07.asciidoc)
 
+### [8回: 6/9](c08.asciidoc)
+
 <!--
 ### [1回: 4/12](c01.asciidoc)
 
@@ -53,6 +55,8 @@
 - [京大のPythonのテキスト](http://hdl.handle.net/2433/245698)
 
 - [MacPCでのPythonとpyxelのインストール](for_macPC_install.md)
+
+- [Pyxel上のグラフィックスとサウンドの使い方](pyxel_graphics.asciidoc)
 
 ## ブラウザだけでプログラミング
 
