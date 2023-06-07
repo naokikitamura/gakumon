@@ -1,0 +1,52 @@
+= Pyxel上のグラフィックとサウンドの使い方
+
+pyxelの画像や音楽はidle上では使うことができません．WindowsはコマンドプロンプトをMacPCはターミナルを使ってプログラムを実行しましょう．
+実行するにはファイルのある場所に移動をしてpyxel run ファイル名.pyとコマンドを入力します．
+
+### ファイルのある場所への移動方法
+1. エクスプローラー(Windows)またはFinder(Mac)を使ってファイルのある場所に移動．
+2. コマンドプロンプトまたはターミナルにcdと入力し，ファイルをドラッグアンドドロップする．その後ファイル名を消してEnterを押す．
+
+### Pyxelのサンプル
+pythonファイル(ファイル名.py)がある場所に移動をして，pyxel editと入力する．絵や音楽を書いて保存する(今回は画像の左上の16×16ピクセルとサウンド0を使用)．
+
+画像の出力テスト
+[source,python]
+----
+import pyxel
+
+pyxel.init(256, 256)
+pyxel.load("my_resource.pyxres")  # データファイル読込
+
+def update():
+    global x
+    x = (x + 10) % 256
+
+def draw():
+    global x
+    pyxel.cls(0)
+    pyxel.blt(x, 100, 0, 0, 0, 16, 16, 1)
+
+x = 10
+pyxel.run(update, draw)
+----
+
+音楽の出力テスト
+[source,python]
+----
+import pyxel
+import random
+
+pyxel.init(256, 256)
+pyxel.load("my_resource.pyxres")  # データファイル読込
+
+pyxel.play(2, 0)  # チャンネル2にSOUND 0を流す
+
+def update():
+    a = 0
+
+def draw():
+    a = 0
+
+pyxel.run(update, draw)
+----
