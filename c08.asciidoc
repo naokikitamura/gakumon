@@ -154,7 +154,7 @@ pyxel.run(update, draw)
 
 キャラを表示するには，pyxelのサンプルプログラムのデータを使うと簡単．
 （すでにキャラが描かれているので．）
-cmd (Windows)やterminal (Mac)から `pyxel examples` を実行すると，
+cmd (Windows)やterminal (Mac)から `pyxel copy_examples` を実行すると，
 今のフォルダに新しく `pyxel_examples` というフォルダが作られて，そこに
 サンプルプログラムが保存される．
 これらのプログラムが使うキャラなどのデータは，さらに下のフォルダ `assets` の中に保存されている．
