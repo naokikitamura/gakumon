@@ -54,9 +54,9 @@ pyxel.run(update, draw)
 詳しくは
 https://github.com/kitao/pyxel/blob/main/docs/README.ja.md[pyxelの公式サイト]を確認すること．
 
-`blt(x, y, tm, u, v, w, h, [colkey])`
+`blt(x, y, img, u, v, w, h, [colkey])`
 
-イメージバンク(0-2)の座標(u,v)から縦w,横hの画像を画面の座標(x,y)にコピーする．w,hが負の場合は水平，垂直方向に反転する．colkeyに色を指定すると透明色として扱う．
+イメージバンクimg(0-2)の座標(u,v)から縦w,横hの画像を画面の座標(x,y)にコピーする．w,hが負の場合は水平，垂直方向に反転する．colkeyに色を指定すると透明色として扱う．
 
 `play(ch, snd, [tick], [loop])`
 
