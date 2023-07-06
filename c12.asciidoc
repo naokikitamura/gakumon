@@ -40,7 +40,7 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 === スライド
 
 * プレゼン資料（スライド）のサンプル
-https://github.com/tatsuhirotsuchiya/gakumon/raw/master/meteo.pptx
+https://github.com/naokikitamura/gakumon/blob/main/meteo.pptx
 
 
 == 前回の質問があった点
