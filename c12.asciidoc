@@ -158,6 +158,7 @@ def update():
                fblock.y -16 <= player.y <= fblock.y and player.vy >= 0:
                 player.y = fblock.y - 16
                 player.vy = 0
+                #ジャンプ回数のリセット
                 player.counter = 2
 
 
@@ -170,6 +171,7 @@ def draw():
     pyxel.text(0, 0, str(life), 10)
     for block in blocks:
         block.draw()
+    #浮遊ブロックの処理
     for fblock in fblocks:
             fblock.draw()
 
