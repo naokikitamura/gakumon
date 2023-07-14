@@ -18,7 +18,7 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 
 == 今後の予定
 
-7/7(金),7/14(金) ゲーム作り
+7/14(金) ゲーム作り
 
 7/21(金) ゲーム作り・資料作り
 
@@ -45,44 +45,41 @@ https://github.com/naokikitamura/gakumon/blob/main/meteo.pptx
 
 == 前回の質問があった点
 
-=== 2段ジャンプと空中の足場
-2段ジャンプはジャンプした回数を変数counterで管理する．
+=== ゲームモードの選択はどのようにしたらできるのか
+第11回のプログラムを変更し，タイトル画面でゲームのモードを選択するクラスGameModeを新たに追加．また，難易度に応じてキャラクターのジャンプ力を変化させた．
 
-空中の足場は衝突判定を行い，衝突していたら台の上に乗るようにする．
-
-two_jump.py
+game_mode.py
 [source,python]
 ----
 import pyxel
 pyxel.init(256, 256)
 
 
+
 class Player:
     def __init__(self):
         self.y = 150
         self.vy = 0
-        #ジャンプ回数を覚える変数を用意
-        self.counter = 2
 
-    def update(self):
+    def update(self,gamemode):
         self.y = min(150, self.y + self.vy)
         self.vy = self.vy + 1
-        #地面に着地したらジャンプ回数をリセットする
-        if self.y == 150:
-            self.counter = 2
-        #self.y = 150(地面にいる)とき以外でもジャンプが出来るように変更
-        if self.counter > 0 and pyxel.btnp(pyxel.KEY_SPACE):
-            self.vy = -10
-            #ジャンプできる回数を減らす
-            self.counter = self.counter - 1
-            
+        if self.y == 150 and pyxel.btnp(pyxel.KEY_SPACE):
+            #game modeによってジャンプ力を変える
+            if gamemode.state=="NORMAL":
+                self.vy = -10
+            else:
+                self.vy = -15
+
     def draw(self):
         pyxel.rectb(200, self.y, 16, 16, 15)
 
 
 class Can:
-    def __init__(self, x, vx):
+    #y座標も受け取るように設定
+    def __init__(self, x, y, vx):
         self.x = x
+        self.y = y
         self.vx = vx
 
     def update(self):
@@ -91,7 +88,7 @@ class Can:
             self.x = -20
 
     def draw(self):
-        pyxel.rectb(self.x, 150, 16, 16, 12)
+        pyxel.rectb(self.x, self.y, 16, 16, 12)
 
 
 class Block:
@@ -107,63 +104,64 @@ class Block:
     def draw(self):
         pyxel.rectb(self.x, 166, 64, 16, self.col)
 
-#浮遊している台のクラス
-class Fblock:
-    def __init__(self, x, col):
-        self.x = x
-        self.y = 120
-        self.col = col
-
+#Gameモードを決めるクラス
+class GameMode:
+    def  __init__(self):
+        self.state = "NORMAL"
     def update(self):
-        self.x = self.x + 4
-        if self.x >= 256:
-            self.x = -64
+        if pyxel.btnp(pyxel.KEY_DOWN):
+            self.state="HARD"
+        if pyxel.btnp(pyxel.KEY_UP):
+            self.state="NORMAL"
 
     def draw(self):
-        pyxel.rect(self.x, self.y, 64, 10, self.col)
-
+        pyxel.text(10,20,"jump game",7)
+        pyxel.text(10,35,"hard",7)
+        pyxel.text(10,30,"normal",7)
+        if self.state=="HARD":
+            pyxel.rectb(2,35,4,4,7)
+        else:
+            pyxel.rectb(2,30,4,4,7)
 
 player = Player()
-cans = [Can(-100, 5), Can(-250, 8)]
+cans = [Can(-100, 150, 5), Can(-250, 150, 8)] #y座標の追加
 state = "GAMEOVER"
 life = 20
 blocks = [Block(0, 1), Block(64, 2), Block(128, 1),
           Block(192, 2), Block(-64, 1)]
-fblocks = [Fblock(0, 7), Fblock(-100,6), Fblock(-200,6)] 
+#Gameモード用のクラスの初期化
+gamemode = GameMode()
 
 
 def update():
-    global player, cans, state, life
+    global player, cans, state, life, gamemode
     if state == "GAMEOVER":
+        gamemode.update()
         if pyxel.btnp(pyxel.KEY_SPACE):
-            state = "PLAYING"
-            life = 20
+            if gamemode.state=="NORMAL":
+                state = "PLAYING"
+                life = 20
+                cans = [Can(-100, 150, 5), Can(-250, 150, 8)]
+            else: #Normal用の初期設定
+                state = "PLAYING"
+                life = 20
+                cans = [ Can(-100, 150, 5), Can(-250, 150, 8), Can(-50, 110, 10), Can(-60, 110, 4)]
     else:
-        player.update()
+        player.update(gamemode)
         for can in cans:
             can.update()
             if can.x - 10 < 200 < can.x + 10 and \
-                    140 <= player.y <= 150:
+                    can.y -10 <= player.y <= can.y + 10: #y座標の当たり判定を缶の高さになるように変更
                 life = life - 1
                 break
         if life == 0:
             state = "GAMEOVER"
         for block in blocks:
             block.update()
-        #浮遊ブロックの処理
-        for fblock in fblocks:
-            fblock.update()
-            #プレイヤーとぶつかったら上に乗るようにする
-            if fblock.x - 16 < 200 < fblock.x + 64 and \
-               fblock.y -16 <= player.y <= fblock.y and player.vy >= 0:
-                player.y = fblock.y - 16
-                player.vy = 0
-                #ジャンプ回数のリセット
-                player.counter = 2
 
 
 def draw():
-    global player, cans, state, life
+    global player, cans, state, life,gamemode
     pyxel.cls(0)
     player.draw()
     for can in cans:
@@ -171,9 +169,10 @@ def draw():
     pyxel.text(0, 0, str(life), 10)
     for block in blocks:
         block.draw()
-    #浮遊ブロックの処理
-    for fblock in fblocks:
-            fblock.draw()
+    #ゲームモード選択画面の表示
+    if state == "GAMEOVER":
+        gamemode.draw()
 
 pyxel.run(update, draw)
+
 ----
