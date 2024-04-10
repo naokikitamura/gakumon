@@ -3,33 +3,7 @@
 
 ## 内容
 
-### [1回: 4/14](c01.asciidoc)
-
-### [2回: 4/21](c02.asciidoc)
-
-### [3回: 4/28](c03.asciidoc)
-
-### [4回: 5/12](c04.asciidoc)
-
-### [5回: 5/19](c05.asciidoc)
-
-### [6回: 5/26](c06.asciidoc) [解答編](c06_ans.asciidoc)
-
-### [7回: 6/2](c07.asciidoc)
-
-### [8回: 6/9](c08.asciidoc)
-
-### [9回: 6/16](c09.asciidoc)
-
-### [10回: 6/23](c10.asciidoc) [参考：タイルマップ](tilemap.asciidoc)
-
-### [11回: 6/30](c11.asciidoc)
-
-### [12回: 7/7](c12.asciidoc)
-
-### [13回: 7/14](c13.asciidoc)
-
-### [14回: 7/21](c14.asciidoc)
+### [1回: 4/12](c01.asciidoc)
 
 <!--
 ### [1回: 4/12](c01.asciidoc)
