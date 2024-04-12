@@ -3,7 +3,7 @@
 ### Pythonのインストール
 
 1. [ここ](https://www.python.org/)からPythonの公式サイトにアクセスをする．
-2. DownloadのPython3.11.3をクリックし，macOS 64-bit universal2 installerをクリックしてダウンロードする．
+2. DownloadのPython3.12.3をクリックし，macOS 64-bit universal2 installerをクリックしてダウンロードする．
 3. ダウンロードしたファイルの指示に従ってPythonのインストールをする．
 
 動作の確認はLaunchpadを開きIDLEを起動する．[第一回の資料](c01.asciidoc)を参考にHello Worldを出力する．
