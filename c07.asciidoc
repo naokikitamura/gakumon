@@ -99,6 +99,14 @@ pyxel.init(256, 256)
 pyxel.load("my_resource.pyxres")  # データファイル読込
 
 pyxel.play(2, 0)  # チャンネル2にSOUND 0を流す
+
+def update():
+    a=1
+
+def draw():
+    a=1
+
+pyxel.run(update, draw)
 ----
 
 ==== 練習
