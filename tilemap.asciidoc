@@ -182,7 +182,7 @@ player = Player()
 pyxel.run(update, draw)
 ----
 
-pyxeleditorを使う場合。pyxel editorマップをつくることができる。
+pyxel editorを使う場合。pyxel editor上でマップをつくることができる。
 
 [source,python]
 ----
