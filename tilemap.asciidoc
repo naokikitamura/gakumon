@@ -181,3 +181,53 @@ def draw():
 player = Player()
 pyxel.run(update, draw)
 ----
+
+pyxeleditorを使う場合。pyxel editorマップをつくることができる。
+
+[source,python]
+----
+import pyxel
+pyxel.init(128, 128)
+
+pyxel.load("my_resource.pyxres")
+
+
+class Player:
+    def __init__(self):
+        self.x = 8
+        self.y = 8
+
+    def update(self):
+        newx = self.x
+        newy = self.y
+        if pyxel.btnp(pyxel.KEY_RIGHT):
+            newx += 8
+        elif pyxel.btnp(pyxel.KEY_LEFT):
+            newx -= 8
+        elif pyxel.btnp(pyxel.KEY_UP):
+            newy -= 8
+        elif pyxel.btnp(pyxel.KEY_DOWN):
+            newy += 8
+        # タイルマップから整数値のペア（タプル）を取得
+        (a, b) = pyxel.tilemap(0).pget(newx//8, newy//8)
+        if (a, b) == (0, 1):  # 道がある
+            self.x = newx
+            self.y = newy
+
+    def draw(self):
+        pyxel.rectb(self.x, self.y, 8, 8, 15)
+
+
+def update():
+    player.update()
+
+
+def draw():
+    pyxel.cls(0)
+    # タイルマップを表示
+    pyxel.bltm(0, 0, 0, 0, 0, 128, 128)
+    player.draw()
+
+player = Player()
+pyxel.run(update, draw)
+----
