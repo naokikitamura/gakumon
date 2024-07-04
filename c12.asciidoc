@@ -18,19 +18,19 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 
 == 今後の予定
 
-7/7(金),7/14(金) ゲーム作り
+7/12(金),7/19(金) ゲーム作り
 
-7/21(金) ゲーム作り・資料作り
+7/26(金) ゲーム作り・資料作り
 
-7/28(金) 発表会
+8/2(金) 発表会
 
 
 == 発表会について
 
-=== 7/28は発表会
+=== 8/2は発表会
 
-- 作成した発表用の資料（パワーポイントなどのファイル）は，7/27の正午までにCLEにアップロードすること．
-- 7/28は，パワーポイントをつかってプレゼンする．
+- 作成した発表用の資料（パワーポイントなどのファイル）は，8/1の正午までにCLEにアップロードすること．
+- 8/1は，パワーポイントをつかってプレゼンする．
 
 当日アップロードしたファイルをダウンロードして，PCにいれておきますので，
 それを使ってプレゼンしてください．
@@ -41,139 +41,3 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 
 * プレゼン資料（スライド）のサンプル
 https://github.com/naokikitamura/gakumon/blob/main/meteo.pptx
-
-
-== 前回の質問があった点
-
-=== 2段ジャンプと空中の足場
-2段ジャンプはジャンプした回数を変数counterで管理する．
-
-空中の足場は衝突判定を行い，衝突していたら台の上に乗るようにする．
-
-two_jump.py
-[source,python]
-----
-import pyxel
-pyxel.init(256, 256)
-
-
-class Player:
-    def __init__(self):
-        self.y = 150
-        self.vy = 0
-        #ジャンプ回数を覚える変数を用意
-        self.counter = 2
-
-    def update(self):
-        self.y = min(150, self.y + self.vy)
-        self.vy = self.vy + 1
-        #地面に着地したらジャンプ回数をリセットする
-        if self.y == 150:
-            self.counter = 2
-        #self.y = 150(地面にいる)とき以外でもジャンプが出来るように変更
-        if self.counter > 0 and pyxel.btnp(pyxel.KEY_SPACE):
-            self.vy = -10
-            #ジャンプできる回数を減らす
-            self.counter = self.counter - 1
-            
-    def draw(self):
-        pyxel.rectb(200, self.y, 16, 16, 15)
-
-
-class Can:
-    def __init__(self, x, vx):
-        self.x = x
-        self.vx = vx
-
-    def update(self):
-        self.x = self.x + self.vx
-        if self.x > 256:
-            self.x = -20
-
-    def draw(self):
-        pyxel.rectb(self.x, 150, 16, 16, 12)
-
-
-class Block:
-    def __init__(self, x, col):
-        self.x = x
-        self.col = col
-
-    def update(self):
-        self.x = self.x + 4
-        if self.x >= 256:
-            self.x = -64
-
-    def draw(self):
-        pyxel.rectb(self.x, 166, 64, 16, self.col)
-
-#浮遊している台のクラス
-class Fblock:
-    def __init__(self, x, col):
-        self.x = x
-        self.y = 120
-        self.col = col
-
-    def update(self):
-        self.x = self.x + 4
-        if self.x >= 256:
-            self.x = -64
-
-    def draw(self):
-        pyxel.rect(self.x, self.y, 64, 10, self.col)
-
-
-player = Player()
-cans = [Can(-100, 5), Can(-250, 8)]
-state = "GAMEOVER"
-life = 20
-blocks = [Block(0, 1), Block(64, 2), Block(128, 1),
-          Block(192, 2), Block(-64, 1)]
-fblocks = [Fblock(0, 7), Fblock(-100,6), Fblock(-200,6)] 
-
-
-def update():
-    global player, cans, state, life
-    if state == "GAMEOVER":
-        if pyxel.btnp(pyxel.KEY_SPACE):
-            state = "PLAYING"
-            life = 20
-    else:
-        player.update()
-        for can in cans:
-            can.update()
-            if can.x - 10 < 200 < can.x + 10 and \
-                    140 <= player.y <= 150:
-                life = life - 1
-                break
-        if life == 0:
-            state = "GAMEOVER"
-        for block in blocks:
-            block.update()
-        #浮遊ブロックの処理
-        for fblock in fblocks:
-            fblock.update()
-            #プレイヤーとぶつかったら上に乗るようにする
-            if fblock.x - 16 < 200 < fblock.x + 64 and \
-               fblock.y -16 <= player.y <= fblock.y and player.vy >= 0:
-                player.y = fblock.y - 16
-                player.vy = 0
-                #ジャンプ回数のリセット
-                player.counter = 2
-
-
-def draw():
-    global player, cans, state, life
-    pyxel.cls(0)
-    player.draw()
-    for can in cans:
-        can.draw()
-    pyxel.text(0, 0, str(life), 10)
-    for block in blocks:
-        block.draw()
-    #浮遊ブロックの処理
-    for fblock in fblocks:
-            fblock.draw()
-
-pyxel.run(update, draw)
-----
