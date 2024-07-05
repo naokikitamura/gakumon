@@ -36,3 +36,8 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 それを使ってプレゼンしてください．
 
 - 時間は，1人3分程度（質問があれば1分程度）．
+
+=== スライド
+
+* プレゼン資料（スライド）のサンプル
+https://github.com/naokikitamura/gakumon/blob/main/meteo.pptx
