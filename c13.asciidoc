@@ -1,0 +1,377 @@
+= 学問への扉：計算機プログラミング入門
+
+
+
+== 課題
+
+自分のゲームをつくっていこう．
+
+基本的には，既存のプログラムを変更すればよい．
+絵をつける，音をつける，とかでもOK．
+
+pyxelオフィシャルのサンプルプログラムも是非参考に．
+
+作りたいゲームがあるが，取っ掛かりがつかめない場合は，要相談．
+
+CLEに１，２行でよいので，今日までにできたこと，と，残り時間で行うことを記入．
+←*できるだけ授業時間中に!*
+
+== 今後の予定
+
+7/14(金) ゲーム作り
+
+7/21(金) ゲーム作り・資料作り
+
+7/28(金) 発表会
+
+
+== 発表会について
+
+=== 7/28は発表会
+
+- 作成した発表用の資料（パワーポイントなどのファイル）は，7/27の正午までにCLEにアップロードすること．
+- 7/28は，パワーポイントをつかってプレゼンする．
+
+当日アップロードしたファイルをダウンロードして，PCにいれておきますので，
+それを使ってプレゼンしてください．
+
+- 時間は，1人3分程度（質問があれば1分程度）．
+
+=== スライド
+
+* プレゼン資料（スライド）のサンプル
+https://github.com/naokikitamura/gakumon/blob/main/meteo.pptx
+
+
+== 前回の質問があった点
+
+=== ゲームモードの選択はどのようにしたらできるのか
+第11回のプログラムを変更し，タイトル画面でゲームのモードを選択するクラスGameModeを新たに追加．また，難易度に応じてキャラクターのジャンプ力を変化させた．
+
+game_mode.py
+[source,python]
+----
+import pyxel
+pyxel.init(256, 256)
+
+
+
+class Player:
+    def __init__(self):
+        self.y = 150
+        self.vy = 0
+
+    def update(self,gamemode):
+        self.y = min(150, self.y + self.vy)
+        self.vy = self.vy + 1
+        if self.y == 150 and pyxel.btnp(pyxel.KEY_SPACE):
+            #game modeによってジャンプ力を変える
+            if gamemode.state=="NORMAL":
+                self.vy = -10
+            else:
+                self.vy = -15
+
+    def draw(self):
+        pyxel.rectb(200, self.y, 16, 16, 15)
+
+
+class Can:
+    #y座標も受け取るように設定
+    def __init__(self, x, y, vx):
+        self.x = x
+        self.y = y
+        self.vx = vx
+
+    def update(self):
+        self.x = self.x + self.vx
+        if self.x > 256:
+            self.x = -20
+
+    def draw(self):
+        pyxel.rectb(self.x, self.y, 16, 16, 12)
+
+
+class Block:
+    def __init__(self, x, col):
+        self.x = x
+        self.col = col
+
+    def update(self):
+        self.x = self.x + 4
+        if self.x >= 256:
+            self.x = -64
+
+    def draw(self):
+        pyxel.rectb(self.x, 166, 64, 16, self.col)
+
+#Gameモードを決めるクラス
+class GameMode:
+    def  __init__(self):
+        self.state = "NORMAL"
+    def update(self):
+        if pyxel.btnp(pyxel.KEY_DOWN):
+            self.state="HARD"
+        if pyxel.btnp(pyxel.KEY_UP):
+            self.state="NORMAL"
+
+    def draw(self):
+        pyxel.text(10,20,"jump game",7)
+        pyxel.text(10,35,"hard",7)
+        pyxel.text(10,30,"normal",7)
+        if self.state=="HARD":
+            pyxel.rectb(2,35,4,4,7)
+        else:
+            pyxel.rectb(2,30,4,4,7)
+
+player = Player()
+cans = [Can(-100, 150, 5), Can(-250, 150, 8)] #y座標の追加
+state = "GAMEOVER"
+life = 20
+blocks = [Block(0, 1), Block(64, 2), Block(128, 1),
+          Block(192, 2), Block(-64, 1)]
+#Gameモード用のクラスの初期化
+gamemode = GameMode()
+
+
+def update():
+    global player, cans, state, life, gamemode
+    if state == "GAMEOVER":
+        gamemode.update()
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            if gamemode.state=="NORMAL":
+                state = "PLAYING"
+                life = 20
+                cans = [Can(-100, 150, 5), Can(-250, 150, 8)]
+            else: #Normal用の初期設定
+                state = "PLAYING"
+                life = 20
+                cans = [ Can(-100, 150, 5), Can(-250, 150, 8), Can(-50, 110, 10), Can(-60, 110, 4)]
+    else:
+        player.update(gamemode)
+        for can in cans:
+            can.update()
+            if can.x - 10 < 200 < can.x + 10 and \
+                    can.y -10 <= player.y <= can.y + 10: #y座標の当たり判定を缶の高さになるように変更
+                life = life - 1
+                break
+        if life == 0:
+            state = "GAMEOVER"
+        for block in blocks:
+            block.update()
+
+
+def draw():
+    global player, cans, state, life,gamemode
+    pyxel.cls(0)
+    player.draw()
+    for can in cans:
+        can.draw()
+    pyxel.text(0, 0, str(life), 10)
+    for block in blocks:
+        block.draw()
+    #ゲームモード選択画面の表示
+    if state == "GAMEOVER":
+        gamemode.draw()
+
+pyxel.run(update, draw)
+
+----
+
+=== ボールを壊すと得点が加算するシステムを作っているのですが、ボールの種類によって加算される得点を変えるシステムを作りたい
+第9回のBallクラスの中身を変更して，
+----
+def __init__(self, x, y, dx, dy):
+----
+の引数に得点を表す変数scoreを追加する．ボールを壊したときに加算する値はball.scoreのようにすると受け取れる．
+
+=== タイルマップを使ったプログラムの書き方(去年の資料から転用)
+
+initializeの部分でtilemapに埋め込んだキャラをクラスに変換している．
+
+my_resource.pyxresの(0,0):壁 (0,1):道 (1,0):プレイヤー横 (1,1):プレイヤー上 (2,0): 敵の画像とタイルマップ0の描画が必要．
+
+.tile.py
+[source,python]
+----
+import pyxel
+pyxel.init(128, 128)
+
+pyxel.load("my_resource.pyxres")  # データファイル読込
+#(0,0):壁 (0,1):道 (1,0):プレイヤー横 (1,1):プレイヤー上 (2,0): 敵
+
+import random
+
+
+class Player:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.vx = 0
+        self.vy = 0
+        self.dx = 0
+        self.dy = 0
+
+    def update(self):
+        newx = self.x
+        newy = self.y
+        if self.vx==0 and self.vy==0:
+            if pyxel.btn(pyxel.KEY_RIGHT):
+                newx += 8
+                self.dx = 1
+                self.dy = 0
+            elif pyxel.btn(pyxel.KEY_LEFT):
+                newx -= 8
+                self.dx = -1
+                self.dy = 0
+            elif pyxel.btn(pyxel.KEY_UP):
+                newy -= 8
+                self.dx = 0
+                self.dy = -1
+            elif pyxel.btn(pyxel.KEY_DOWN):
+                newy += 8
+                self.dx = 0
+                self.dy = 1
+            elif self.dx != 0:
+                newx += self.dx*8
+            elif self.dy !=0:
+                newy += self.dy*8
+            # タイルマップから整数値のペア（タプル）を取得
+            (a, b) = pyxel.tilemap(0).pget(newx//8, newy//8)
+            if (a, b) == (0, 1):  # 道がある
+                self.vx = newx - self.x
+                self.vy = newy - self.y
+        else:
+            if self.vx>0:
+                self.vx -=1
+                self.x+=1
+            if self.vx<0:
+                self.vx +=1
+                self.x-=1
+            if self.vy>0:
+                self.vy -=1
+                self.y+=1
+            if self.vy<0:
+                self.vy+=1
+                self.y-=1
+                
+
+    def draw(self):
+        if self.dx==-1:
+            pyxel.blt(self.x, self.y,0, 8, 0, -8,8,7)
+        elif self.dy==1:
+            pyxel.blt(self.x, self.y,0, 8, 8, 8,8,7)
+        elif self.dy==-1:
+            pyxel.blt(self.x, self.y,0, 8, 8, 8,-8,7)
+        else:
+            pyxel.blt(self.x, self.y,0, 8, 0, 8,8,7)
+            
+            
+class Enemy:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.vx = 0
+        self.vy = 0
+        self.dx = 0
+        self.dy = 0
+        self.count=1
+        self.state="DOWN"
+        self.rand=0
+
+    def update(self):
+        newx = self.x
+        newy = self.y
+        #countが一定時間を超えたら向きを変更
+        self.count-=1
+        if self.count==0:
+        	self.count = 8*random.randint(0,10)
+        	self.rand=random.randint(0,3)
+        #移動方向の更新
+        if self.rand==0:
+        	self.state="UP"
+        elif self.rand==1:
+        	self.state="DOWN"
+        elif self.rand==2:
+        	self.state="LEFT"
+        elif self.rand==3:
+        	self.state="RIGHT"
+        #敵の移動
+        if self.vx==0 and self.vy==0:
+            if self.state=="RIGHT":
+                newx += 8
+                self.dx = 1
+                self.dy = 0
+            elif self.state=="LEFT":
+                newx -= 8
+                self.dx = -1
+                self.dy = 0
+            elif self.state=="UP":
+                newy -= 8
+                self.dx = 0
+                self.dy = -1
+            elif self.state=="DOWN":
+                newy += 8
+                self.dx = 0
+                self.dy = 1
+            elif self.dx != 0:
+                newx += self.dx*8
+            elif self.dy !=0:
+                newy += self.dy*8
+            # タイルマップから整数値のペア（タプル）を取得
+            (a, b) = pyxel.tilemap(0).pget(newx//8, newy//8)
+            if (a, b) == (0, 1):  # 道がある
+                self.vx = newx - self.x
+                self.vy = newy - self.y
+            else:
+            	#壁にぶつかったら向き変更
+            	self.count = 8*random.randint(0,10)
+            	self.rand= random.randint(0,3)
+        else:
+            if self.vx>0:
+                self.vx -=1
+                self.x+=1
+            if self.vx<0:
+                self.vx +=1
+                self.x-=1
+            if self.vy>0:
+                self.vy -=1
+                self.y+=1
+            if self.vy<0:
+                self.vy+=1
+                self.y-=1
+
+    def draw(self):
+    	pyxel.blt(self.x, self.y,0, 16, 0, 8,8,7)
+
+def update():
+	for player in players:
+	    player.update()
+	for enemy in enemys:
+		enemy.update()
+
+
+def draw():
+    pyxel.cls(0)
+    # タイルマップを表示
+    pyxel.bltm(0, 0, 0, 0, 0, 128, 128,7)
+    for player in players:
+    	player.draw()
+    for enemy in enemys:
+    	enemy.draw()
+    	
+def initialize():
+	for i in range(0,16):
+		for j in range(0,16):
+			(a,b) = pyxel.tilemap(0).pget(i,j)
+			if(a==1 and b==0):
+				players.append(Player(i*8,j*8))
+				pyxel.tilemap(0).set(i,j,["0001"])
+			if(a==2 and b==0):
+				enemys.append(Enemy(i*8,j*8))
+				pyxel.tilemap(0).set(i,j,["0001"])
+
+players=[]
+enemys=[]
+initialize()
+pyxel.run(update, draw)
+----
