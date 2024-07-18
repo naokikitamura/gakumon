@@ -1,0 +1,238 @@
+= 学問への扉：計算機プログラミング入門
+
+
+
+== 課題
+
+来週の授業に向けて発表スライドを作っていこう．
+
+== 今後の予定
+
+7/21(金) 資料作り(ゲーム作りしてもok)
+7/28(金) 発表会
+
+
+== 発表会について
+
+=== 7/28は発表会
+
+- 作成した発表用の資料（パワーポイントなどのファイル）は，7/27正午までにCLEにアップロードすること．
+- 7/28は，パワーポイントをつかってプレゼンする．
+
+当日アップロードしたファイルをダウンロードして，PCにいれておきますので，
+それを使ってプレゼンしてください．
+
+- 時間は，1人3分程度（質問があれば1分程度）．
+
+== 前回の質問
+=== ある一定のスコアをとるとゲームクリアとなるようなプログラミング
+新しい状態としてGAMECLEARを追加．counterの値が100以上になるとGameClearの画面に移行する．
+
+[source,python]
+----
+import pyxel
+import random
+import initialization
+from ballclass import Ball
+from playerclass import Player
+from missileclass import Missile
+
+pyxel.init(256, 256)
+initialization.initialize()
+
+counter = 0
+player = Player()
+balls = []
+state = 'GAMEOVER'
+hiscore = 0
+missiles = []
+
+
+def update():
+    global state
+    
+    #GAMECLEAR用の処理を追加
+    if state == 'GAMEOVER' or state == 'GAMECLEAR':
+        if pyxel.btn(pyxel.KEY_RETURN):
+            start_game()
+            state = 'PLAYING'
+    else:
+        update_playing()
+
+
+def start_game():
+    global counter, balls, player
+    counter = 0
+    player.x = 120
+    player.y = 220
+    new_balls = []
+    for i in range(8):
+        newball = Ball(100, 0,
+                       random.randint(-8, 8), random.randint(4, 8))
+        new_balls.append(newball)
+    balls = new_balls
+
+
+def update_playing():
+    global player, balls, counter, state, hiscore, missiles
+    player.update()
+
+    for b in balls:
+        b.update()
+
+    counter = counter + 1
+
+    for b in balls:
+        if b.x - 10 < player.x < b.x + 10 and \
+                b.y - 10 < player.y < b.y + 10:
+            pyxel.play(0, 1)
+            state = 'GAMEOVER'
+            hiscore = max(counter, hiscore)
+
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        missiles.append(Missile(player.x, player.y))
+        pyxel.play(0, 0)
+    for m in missiles:
+        m.update()
+
+    # ボールとミサイルの当たり判定
+    for b in balls:
+        for m in missiles:
+            if b.x - 10 < m.x < b.x + 10 and \
+               b.y - 10 < m.y < b.y + 10:
+                m.dead = True
+                b.y = -10
+
+    new_missiles = []
+    for m in missiles:
+        if m.dead is False:
+            new_missiles.append(m)
+    missiles = new_missiles
+    
+    #counterが100を超えたらクリア
+    if counter >= 100:
+        state = 'GAMECLEAR'
+
+
+def draw():
+    global player, balls, counter, hiscore, missiles
+    pyxel.cls(12)
+    player.draw()
+    for b in balls:
+        b.draw()
+    pyxel.text(5, 4, str(counter), 1)
+    pyxel.text(220, 4, str(hiscore), 1)
+    if state == 'GAMEOVER':
+        pyxel.text(100, 100, 'Game Over', 8)
+    #GAMECLEAR用の文字を追加
+    if state == 'GAMECLEAR':
+        pyxel.text(100, 100, 'Game Clear', 7)
+    for m in missiles:
+        m.draw()
+
+pyxel.run(update, draw)
+----
+
+=== プレイヤーと障害物が衝突した際の無敵時間の導入
+
+プレイヤーにcounterという変数を追加．counterが0でないときはダメージを受けないように変更．
+
+[source,python]
+----
+import pyxel
+pyxel.init(256, 256)
+
+
+class Player:
+    def __init__(self):
+        self.y = 150
+        self.vy = 0
+        #無敵時間の設定
+        self.count = 0
+
+    def update(self):
+        self.y = min(150, self.y + self.vy)
+        self.vy = self.vy + 1
+        if self.y == 150 and pyxel.btnp(pyxel.KEY_SPACE):
+            self.vy = -10
+        #無敵時間の更新
+        self.count = max(self.count -1,0)
+
+    def draw(self):
+        #無敵中は色が変わるように変更
+        if self.count == 0:
+            pyxel.rectb(200, self.y, 16, 16, 15)
+        else:
+            pyxel.rectb(200, self.y, 16, 16, 8)
+
+class Can:
+    def __init__(self, x, vx):
+        self.x = x
+        self.vx = vx
+
+    def update(self):
+        self.x = self.x + self.vx
+        if self.x > 256:
+            self.x = -20
+
+    def draw(self):
+        pyxel.rectb(self.x, 150, 16, 16, 12)
+
+
+class Block:
+    def __init__(self, x, col):
+        self.x = x
+        self.col = col
+
+    def update(self):
+        self.x = self.x + 4
+        if self.x >= 256:
+            self.x = -64
+
+    def draw(self):
+        pyxel.rectb(self.x, 166, 64, 16, self.col)
+
+
+player = Player()
+cans = [Can(-100, 5), Can(-250, 8)]
+state = "GAMEOVER"
+life = 20
+blocks = [Block(0, 1), Block(64, 2), Block(128, 1),
+          Block(192, 2), Block(-64, 1)]
+
+
+def update():
+    global player, cans, state, life
+    if state == "GAMEOVER":
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            state = "PLAYING"
+            life = 20
+    else:
+        player.update()
+        for can in cans:
+            can.update()
+            #countが0の時にのみ衝突
+            if can.x - 10 < 200 < can.x + 10 and \
+                    140 <= player.y <= 150 and player.count == 0:
+                life = life - 1
+                #countを再設定
+                player.count = 20
+                break
+        if life == 0:
+            state = "GAMEOVER"
+        for block in blocks:
+            block.update()
+
+
+def draw():
+    global player, cans, state, life
+    pyxel.cls(0)
+    player.draw()
+    for can in cans:
+        can.draw()
+    pyxel.text(0, 0, str(life), 10)
+    for block in blocks:
+        block.draw()
+
+pyxel.run(update, draw)
+----
