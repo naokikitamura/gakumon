@@ -1,0 +1,39 @@
+= 学問への扉：計算機プログラミング入門
+
+== 課題
+
+自分のゲームをつくっていこう．
+
+基本的には，既存のプログラムを変更すればよい．
+絵をつける，音をつける，とかでもOK．
+
+pyxelオフィシャルのサンプルプログラムも是非参考に．
+
+作りたいゲームがあるが，取っ掛かりがつかめない場合は，要相談．
+
+CLEに１，２行でよいので，今日までにできたこと，と，残り時間で行うことを記入．
+
+=== マウスの使い方
+pyxel.mouse_x，pyxel.mouse_yでマウスのx座標，y座標を取得できる．また，pyxel.btn(pyxel.MOUSE_BUTTON_LEFT)で左クリックがされているかを判定できる．
+詳しい説明はlink:https://github.com/kitao/pyxel/blob/main/docs/README.ja.md[公式ホームページ]のマウスの説明やキー定義を確認すること．
+
+.mouse.py
+[source,python]
+----
+import pyxel
+
+pyxel.init(128, 128)
+# pyxel.mouse(True)
+
+def update():
+    a = 1
+
+def draw():
+    pyxel.cls(0)
+    if(pyxel.btn(pyxel.MOUSE_BUTTON_LEFT)):
+        pyxel.circ(pyxel.mouse_x,pyxel.mouse_y,10,9)
+    else:
+        pyxel.circ(pyxel.mouse_x,pyxel.mouse_y,10,7)
+
+pyxel.run(update,draw)
+----
