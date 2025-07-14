@@ -18,20 +18,19 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 
 == 今後の予定
 
-7/12(金) ゲーム作り
+7/16(水) ゲーム作り
 
-#7/19(金)ゲーム作り・資料作り#
+#7/23(水)ゲーム作り・資料作り#
 
-#7/26(金) 発表会#
+#7/30(水) 発表会#
 
 
 == 発表会について
 
-=== 7/26は発表会
-*(7/10に追記:以前は発表会の日程を8/2とアナウンスしていましたが正しくは7/26です)*
+=== 7/30は発表会
 
-- 作成した発表用の資料（パワーポイントなどのファイル）は，7/25の正午までにCLEにアップロードすること．
-- 7/26は，パワーポイントをつかってプレゼンする．
+- 作成した発表用の資料（パワーポイントなどのファイル）は，7/29の正午までにCLEにアップロードすること．
+- 7/30は，パワーポイントをつかってプレゼンする．
 
 当日アップロードしたファイルをダウンロードして，PCにいれておきますので，
 それを使ってプレゼンしてください．
@@ -43,53 +42,3 @@ CLEに１，２行でよいので，今日までにできたこと，と，残�
 * プレゼン資料（スライド）のサンプル
 https://github.com/naokikitamura/gakumon/blob/main/meteo.pptx
 
-== 前回の質問があった点
-
-=== キー入力の結果をpyxel上で確認する
-key_input.py
-[source,python]
-----
-import pyxel
-
-pyxel.init(256, 256)
-
-col = 0
-col2 = 0
-
-def update():
-    global col,col2
-    if pyxel.btnp(pyxel.KEY_1):
-        col2 = col2*10 + 1
-    if pyxel.btnp(pyxel.KEY_2):
-        col2 = col2*10 + 2
-    if pyxel.btnp(pyxel.KEY_3):
-        col2 = col2*10 + 3
-    if pyxel.btnp(pyxel.KEY_4):
-        col2 = col2*10 + 4
-    if pyxel.btnp(pyxel.KEY_5):
-        col2 = col2*10 + 5
-    if pyxel.btnp(pyxel.KEY_6):
-        col2 = col2*10 + 6
-    if pyxel.btnp(pyxel.KEY_7):
-        col2 = col2*10 + 7
-    if pyxel.btnp(pyxel.KEY_8):
-        col2 = col2*10 + 8
-    if pyxel.btnp(pyxel.KEY_9):
-        col2 = col2*10 + 9
-    if pyxel.btnp(pyxel.KEY_0):
-        col2 = col2*10 + 0
-    if pyxel.btnp(pyxel.KEY_SPACE):
-        col = col2
-        col2 = 0
-        
-
-
-def draw():
-    global col,col2
-    global player_x
-    pyxel.cls(col%16)
-    pyxel.text(20,20,str(col2),1)
-
-pyxel.run(update, draw)
-
-----
