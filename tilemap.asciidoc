@@ -1,5 +1,7 @@
 = 学問への扉：計算機プログラミング入門
 
+詳しい説明は[APIリファレンス](https://kitao.github.io/pyxel/web/api-reference/)を参考にすること
+
 == タイルマップ
 
 タイルマップは，地形や背景を実現するのに便利な機能．
@@ -58,11 +60,11 @@ pyxeleditorで編集できる．
 
 === プログラムからタイルの情報を取得
 
-`pyxel.tilemap(0).get(x, y)`
+`pyxel.tilemap(0).pget(x, y)`
 
 <x, y> のタイルの整数値のペアをゲット。
 
-`(a, b) = pyxel.tilemap(0).get(10, 10)`
+`(a, b) = pyxel.tilemap(0).pget(10, 10)`
 
 なら，<10,10>のタイルの整数値ペアがa,bに入る．
 
