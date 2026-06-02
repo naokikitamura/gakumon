@@ -15,7 +15,7 @@
 
 ### [6回: 5/27](c06.asciidoc)  [解答編](c06_ans.asciidoc)
 
-### [7回: 6/3](c07.asciidoc)
+### [7回: 6/3](c07.asciidoc)   [参考：タイルマップ](tilemap.asciidoc)
 
 ### 8回: 6/10
 
