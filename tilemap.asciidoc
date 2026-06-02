@@ -1,6 +1,6 @@
 = 学問への扉：計算機プログラミング入門
 
-詳しい説明は[APIリファレンス](https://kitao.github.io/pyxel/web/api-reference/)を参考にすること
+詳しい説明はhttps://kitao.github.io/pyxel/web/api-reference/[APIリファレンス]を参考にすること
 
 == タイルマップ
 
