@@ -13,7 +13,7 @@
 
 ### [5回: 5/20](c05.asciidoc)
 
-### [6回: 5/27](c06.asciidoc)[解答編](c06_ans.asciidoc)
+### [6回: 5/27](c06.asciidoc)  [解答編](c06_ans.asciidoc)
 
 ### [7回: 6/3](c07.asciidoc)
 
