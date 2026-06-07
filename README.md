@@ -17,7 +17,7 @@
 
 ### [7回: 6/3](c07.asciidoc)   [参考：タイルマップ](tilemap.asciidoc)
 
-### [8回: 6/10](c07.asciidoc)
+### [8回: 6/10](c08.asciidoc)
 
 ### 9回: 6/17
 
