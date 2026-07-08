@@ -88,11 +88,13 @@
 
 - [WindowsでPathの設定](https://www.javadrive.jp/python/install/index3.html)
 
-- [Homebrewのインストール](https://qiita.com/zaburo/items/29fe23c1ceb6056109fd)
+<!-- - [Homebrewのインストール](https://qiita.com/zaburo/items/29fe23c1ceb6056109fd)-->
 
-- [スタンドアロン版Pyxelのインストール](https://github.com/kitao/pyxel/blob/main/docs/README.ja.md)
+<!-- [スタンドアロン版Pyxelのインストール](https://github.com/kitao/pyxel/blob/main/docs/README.ja.md)-->
 
-- [Pyxelの公式ホームページ](https://github.com/kitao/pyxel/blob/main/docs/README.ja.md)
+- [Pyxelの公式ホームページ](https://github.com/kitao/pyxel)
+
+- [PyxelAPIリファレンス](https://kitao.github.io/pyxel/web/api-reference/)
 
 Windowsについては，pipにPathが通っていなければ，py -m pip ... を試してみてください．
 もしくは，Pythonを一度アンインストールして，「Add Python 3.10 to PATH」をチェックしてインストールした
